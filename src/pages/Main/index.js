@@ -38,17 +38,42 @@ export default class Main extends Component {
     e.preventDefault();
 
     this.setState({ loading: true });
-
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+    // this.state.newRepo !== '' && repositories.map(t => t.name.toLowerCase() === this.state.newRepo.toLowerCase()).every(f => f === false)
 
-    const data = {
-      name: response.data.full_name,
-    };
+    /* console.log(
+      this.state.newRepo !== '' &&
+        repositories
+          .map(t => t.name.toLowerCase() === this.state.newRepo.toLowerCase())
+          .every(f => f === false)
+    ); */
+    if (this.state.newRepo !== '') {
+      try {
+        const response = await api.get(`/repos/${newRepo}`);
 
+        const data = {
+          name: response.data.full_name,
+        };
+
+        if (
+          repositories
+            .map(t => t.name.toLowerCase() === this.state.newRepo.toLowerCase())
+            .every(f => f === false)
+        ) {
+          this.setState({
+            repositories: [...repositories, data],
+          });
+        } else {
+          console.log('Repository already exists.');
+        }
+      } catch (err) {
+        console.log(`Error code: ${err.response.status}`);
+      }
+    }
+
+    // clear textbox and enable button
     this.setState({
-      repositories: [...repositories, data],
       newRepo: '',
       loading: false,
     });
