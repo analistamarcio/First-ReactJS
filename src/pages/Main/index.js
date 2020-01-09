@@ -40,14 +40,6 @@ export default class Main extends Component {
     this.setState({ loading: true });
     const { newRepo, repositories } = this.state;
 
-    // this.state.newRepo !== '' && repositories.map(t => t.name.toLowerCase() === this.state.newRepo.toLowerCase()).every(f => f === false)
-
-    /* console.log(
-      this.state.newRepo !== '' &&
-        repositories
-          .map(t => t.name.toLowerCase() === this.state.newRepo.toLowerCase())
-          .every(f => f === false)
-    ); */
     if (this.state.newRepo !== '') {
       try {
         const response = await api.get(`/repos/${newRepo}`);
